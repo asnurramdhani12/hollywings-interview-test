@@ -38,6 +38,7 @@ class BookRequest extends FormRequest
             'description' => 'required',
             'image' => 'required',
             'category_id' => 'required|numeric',
+            'stock' => 'required|numeric',
         ];
     }
 
@@ -50,6 +51,8 @@ class BookRequest extends FormRequest
             'image.required' => 'Image is required',
             'category_id.required' => 'Category is required',
             'category_id.numeric' => 'Category must be a number',
+            'stock.required' => 'Stock is required',
+            'stock.numeric' => 'Stock must be a number',
         ];
     }
 

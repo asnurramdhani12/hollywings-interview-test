@@ -15,14 +15,14 @@ class BookSeeder extends Seeder
     public function run(): void
     {
         $books = [
-            ["title" => "Book A", "author" => "Author 1", "description" => "Description A", "image" => "book_a.jpg", "category_name" => "Novel"],
-            ["title" => "Book B", "author" => "Author 2", "description" => "Description B", "image" => "book_b.jpg", "category_name" => "Comics"],
-            ["title" => "Book C", "author" => "Author 3", "description" => "Description C", "image" => "book_c.jpg", "category_name" => "Fiction"],
-            ["title" => "Book D", "author" => "Author 4", "description" => "Description D", "image" => "book_d.jpg", "category_name" => "Horror"],
-            ["title" => "Book E", "author" => "Author 5", "description" => "Description E", "image" => "book_e.jpg", "category_name" => "Fantasy"],
-            ["title" => "Book F", "author" => "Author 6", "description" => "Description F", "image" => "book_f.jpg", "category_name" => "Mystery"],
-            ["title" => "Book G", "author" => "Author 7", "description" => "Description G", "image" => "book_g.jpg", "category_name" => "Thriller"],
-            ["title" => "Book H", "author" => "Author 8", "description" => "Description H", "image" => "book_h.jpg", "category_name" => "Sci-Fi"],
+            ["title" => "Book A", "author" => "Author 1", "description" => "Description A", "image" => "book_a.jpg", "category_name" => "Novel", "stock" => 10],
+            ["title" => "Book B", "author" => "Author 2", "description" => "Description B", "image" => "book_b.jpg", "category_name" => "Comics", "stock" => 5],
+            ["title" => "Book C", "author" => "Author 3", "description" => "Description C", "image" => "book_c.jpg", "category_name" => "Fiction", "stock" => 20],
+            ["title" => "Book D", "author" => "Author 4", "description" => "Description D", "image" => "book_d.jpg", "category_name" => "Horror", "stock" => 15],
+            ["title" => "Book E", "author" => "Author 5", "description" => "Description E", "image" => "book_e.jpg", "category_name" => "Fantasy", "stock" => 8],
+            ["title" => "Book F", "author" => "Author 6", "description" => "Description F", "image" => "book_f.jpg", "category_name" => "Mystery", "stock" => 12],
+            ["title" => "Book G", "author" => "Author 7", "description" => "Description G", "image" => "book_g.jpg", "category_name" => "Thriller", "stock" => 18],
+            ["title" => "Book H", "author" => "Author 8", "description" => "Description H", "image" => "book_h.jpg", "category_name" => "Sci-Fi", "stock" => 9],
         ];
 
         // Insert books into the books table with category_id
