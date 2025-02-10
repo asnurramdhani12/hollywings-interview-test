@@ -7,12 +7,13 @@ use App\Http\Requests\RegisterRequest;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class Auth extends Controller
 {
+
     public function register(RegisterRequest $request)
     {
         // Validate Request
@@ -47,35 +48,48 @@ class Auth extends Controller
         // Create Token JWT
         $credentials = $request->only('email', 'password');
 
-        if (!$token = FacadesAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return ResponseHelper::error('Invalid credentials', 401);
         }
+
+        // Get the authenticated user.
+        $user = auth()->user();
+
+        // (optional) Attach the role to the token.
+        $token = JWTAuth::claims(['role' => $user->role])->fromUser($user);
 
         return ResponseHelper::success([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'expires_in' => FacadesAuth::factory()->getTTL() * 60
+            'expires_in' => JWTAuth::factory()->getTTL() * 60
         ]);
     }
 
     public function logout()
     {
-        FacadesAuth::logout();
+        auth()->invalidate(auth()->getToken());
         return ResponseHelper::success([], 'Logout successfully');
     }
 
     public function refresh()
     {
-        $token = FacadesAuth::refresh();
         return ResponseHelper::success([
-            'access_token' => $token,
+            'access_token' => auth()->refresh(),
             'token_type' => 'Bearer',
-            'expires_in' => FacadesAuth::factory()->getTTL() * 60
+            'expires_in' => JWTAuth::factory()->getTTL() * 60
         ]);
     }
 
     public function me()
     {
-        return ResponseHelper::success(FacadesAuth::user());
+        try {
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return ResponseHelper::error('User not found', 404);
+            }
+        } catch (JWTException $e) {
+            return ResponseHelper::error('Invalid token', 401);
+        }
+
+        return ResponseHelper::success($user);
     }
 }
