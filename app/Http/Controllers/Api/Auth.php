@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class Auth extends Controller
@@ -87,6 +88,7 @@ class Auth extends Controller
                 return ResponseHelper::error('User not found', 404);
             }
         } catch (JWTException $e) {
+            Log::error($e->getMessage());
             return ResponseHelper::error('Invalid token', 401);
         }
 

@@ -9,7 +9,10 @@ class ResponseHelper
         return response()->json([
             'success' => true,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
+            'metadata' => [
+                'request_id' => request()->header('X-Request-ID'),
+            ]
         ], $status);
     }
 
@@ -18,7 +21,10 @@ class ResponseHelper
         return response()->json([
             'success' => false,
             'message' => $message,
-            'errors' => $errors
+            'errors' => $errors,
+            'metadata' => [
+                'request_id' => request()->header('X-Request-ID'),
+            ],
         ], $status);
     }
 }
