@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth;
 use App\Http\Middleware\JwtMiddleware;
@@ -21,4 +20,13 @@ Route::group(['prefix' => 'category_book', 'middleware' => [JwtMiddleware::class
     Route::get('/{id}', [App\Http\Controllers\Api\CategoryBook::class, 'show']);
     Route::put('/{id}', [App\Http\Controllers\Api\CategoryBook::class, 'update']);
     Route::delete('/{id}', [App\Http\Controllers\Api\CategoryBook::class, 'destroy']);
+});
+
+// for book routes
+Route::group(['prefix' => 'book', 'middleware' => [JwtMiddleware::class . ':admin']], function () {
+    Route::get('/', [App\Http\Controllers\Api\Book::class, 'index']);
+    Route::post('/', [App\Http\Controllers\Api\Book::class, 'store']);
+    Route::get('/{id}', [App\Http\Controllers\Api\Book::class, 'show']);
+    Route::put('/{id}', [App\Http\Controllers\Api\Book::class, 'update']);
+    Route::delete('/{id}', [App\Http\Controllers\Api\Book::class, 'destroy']);
 });

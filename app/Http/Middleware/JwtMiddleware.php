@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Helpers\ResponseHelper;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -26,6 +27,7 @@ class JwtMiddleware
                 return ResponseHelper::error('Forbidden: You do not have access to this resource.', 403);
             }
         } catch (JWTException $e) {
+            Log::error($e->getMessage());
             return ResponseHelper::error('Invalid token', 401);
         }
 
