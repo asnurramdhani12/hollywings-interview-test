@@ -13,7 +13,8 @@ class Books extends Model
         'author',
         'description',
         'image',
-        'category_id'
+        'category_id',
+        'stock',
     ];
 
     public function category()

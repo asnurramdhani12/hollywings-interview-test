@@ -30,3 +30,11 @@ Route::group(['prefix' => 'book', 'middleware' => [JwtMiddleware::class . ':admi
     Route::put('/{id}', [App\Http\Controllers\Api\Book::class, 'update']);
     Route::delete('/{id}', [App\Http\Controllers\Api\Book::class, 'destroy']);
 });
+
+// for borrowing and returning book routes
+Route::group(['prefix' => 'borrowing_books'], function () {
+    Route::post('/borrow', [App\Http\Controllers\Api\BorrowingBooks::class, 'borrow'])->middleware([JwtMiddleware::class . ':user']);
+    Route::post('/accepted/{id}', [App\Http\Controllers\Api\BorrowingBooks::class, 'accepted'])->middleware([JwtMiddleware::class . ':admin']);
+    Route::post('/returned/{id}', [App\Http\Controllers\Api\BorrowingBooks::class, 'returned'])->middleware([JwtMiddleware::class . ':admin']);
+    Route::get('/list', [App\Http\Controllers\Api\BorrowingBooks::class, 'list'])->middleware([JwtMiddleware::class . ':*']);
+});
