@@ -7,91 +7,111 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryBookRequest;
 use App\Models\CategoryBook as ModelsCategoryBook;
+use Illuminate\Support\Facades\Log;
 
 class CategoryBook extends Controller
 {
     public function store(CategoryBookRequest $request)
     {
-        $validate = $request->validated();
+        try {
+            // Validate Request
+            $validate = $request->validated();
 
-        $category = ModelsCategoryBook::create([
-            'category_name' => $validate['category_name']
-        ]);
+            $category = ModelsCategoryBook::create([
+                'category_name' => $validate['category_name']
+            ]);
 
-        if (!$category) {
+            return ResponseHelper::success($category, 'Category created successfully', 201);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return ResponseHelper::error('Something went wrong', 500);
         }
-
-        return ResponseHelper::success($category, 'Category created successfully', 201);
     }
 
     public function index()
     {
-        $category = ModelsCategoryBook::all();
+        try {
+            $category = ModelsCategoryBook::all();
 
-        if (!$category) {
+            if ($category->isEmpty()) {
+                Log::error('No categories found');
+                return ResponseHelper::error('Category not found', 404);
+            }
+
+            return ResponseHelper::success($category);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return ResponseHelper::error('Something went wrong', 500);
         }
-
-        if ($category->isEmpty()) {
-            return ResponseHelper::error('Category not found', 404);
-        }
-
-        return ResponseHelper::success($category);
     }
 
     public function show($id)
     {
-        // Validate Request
-        if (!is_numeric($id)) {
-            return ResponseHelper::error('Invalid id', 400);
+        try {
+            // Validate Request
+            if (!is_numeric($id)) {
+                return ResponseHelper::error('Invalid id', 400);
+            }
+
+            $category = ModelsCategoryBook::find($id);
+
+            if (!$category) {
+                Log::error('Category not found');
+                return ResponseHelper::error('Category not found', 404);
+            }
+
+            return ResponseHelper::success($category);
+        } catch (\Throwable $th) {
+            return ResponseHelper::error('Something went wrong', 500);
         }
-
-        $category = ModelsCategoryBook::find($id);
-
-        if (!$category) {
-            return ResponseHelper::error('Category not found', 404);
-        }
-
-        return ResponseHelper::success($category);
     }
 
     public function destroy($id)
     {
-        // Validate Request
-        if (!is_numeric($id)) {
-            return ResponseHelper::error('Invalid id', 400);
+        try {
+            // Validate Request
+            if (!is_numeric($id)) {
+                return ResponseHelper::error('Invalid id', 400);
+            }
+
+            $category = ModelsCategoryBook::find($id);
+
+            if (!$category) {
+                return ResponseHelper::error('Category not found', 404);
+            }
+
+            $category->delete();
+
+            return ResponseHelper::success([], 'Category deleted successfully');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return ResponseHelper::error('Something went wrong', 500);
         }
-
-        $category = ModelsCategoryBook::find($id);
-
-        if (!$category) {
-            return ResponseHelper::error('Category not found', 404);
-        }
-
-        $category->delete();
-
-        return ResponseHelper::success([], 'Category deleted successfully');
     }
 
     public function update(CategoryBookRequest $request, $id)
     {
-        // Validate Request
-        if (!is_numeric($id)) {
-            return ResponseHelper::error('Invalid id', 400);
+        try {
+            // Validate Request
+            if (!is_numeric($id)) {
+                return ResponseHelper::error('Invalid id', 400);
+            }
+
+            $validate = $request->validated();
+
+            $category = ModelsCategoryBook::find($id);
+
+            if (!$category) {
+                return ResponseHelper::error('Category not found', 404);
+            }
+
+            $category->category_name = $validate['category_name'];
+            $category->save();
+
+            return ResponseHelper::success($category, 'Category updated successfully');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return ResponseHelper::error('Something went wrong', 500);
         }
-
-        $validate = $request->validated();
-
-        $category = ModelsCategoryBook::find($id);
-
-        if (!$category) {
-            return ResponseHelper::error('Category not found', 404);
-        }
-
-        $category->category_name = $validate['category_name'];
-        $category->save();
-
-        return ResponseHelper::success($category, 'Category updated successfully');
     }
 }

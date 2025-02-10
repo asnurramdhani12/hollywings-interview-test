@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $class = [
             UserSeeder::class,
-            CategoryBookSeeder::class
+            CategoryBookSeeder::class,
+            BookSeeder::class
         ];
 
         foreach ($class as $class) {

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\JwtMiddleware;
+use App\Http\Middleware\RequestIdMiddleware;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(RequestIdMiddleware::class);
         $middleware->validateCsrfTokens(except: [
             'api/*' // <-- exclude this route
         ]);
