@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Hash;
 
@@ -52,7 +53,29 @@ class Auth extends Controller
 
         return ResponseHelper::success([
             'access_token' => $token,
-            'refresh_token' => FacadesAuth::refresh()
+            'token_type' => 'Bearer',
+            'expires_in' => FacadesAuth::factory()->getTTL() * 60
         ]);
+    }
+
+    public function logout()
+    {
+        FacadesAuth::logout();
+        return ResponseHelper::success([], 'Logout successfully');
+    }
+
+    public function refresh()
+    {
+        $token = FacadesAuth::refresh();
+        return ResponseHelper::success([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires_in' => FacadesAuth::factory()->getTTL() * 60
+        ]);
+    }
+
+    public function me()
+    {
+        return ResponseHelper::success(FacadesAuth::user());
     }
 }
