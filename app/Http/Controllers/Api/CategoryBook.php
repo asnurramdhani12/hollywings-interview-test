@@ -160,6 +160,8 @@ class CategoryBook extends Controller
             $redisKey = $this->redisKey;
             RedisHelper::del($redisKey);
 
+            DB::commit();
+
             return ResponseHelper::success($category, 'Category updated successfully');
         } catch (\Throwable $th) {
             DB::rollBack();

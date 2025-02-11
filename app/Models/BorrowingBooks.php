@@ -19,11 +19,11 @@ class BorrowingBooks extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function book()
     {
-        return $this->hasOne(Books::class, 'id');
+        return $this->hasOne(Books::class, 'id', 'book_id');
     }
 }

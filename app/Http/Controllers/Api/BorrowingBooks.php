@@ -158,7 +158,7 @@ class BorrowingBooks extends Controller
     {
         try {
             // Default Relation
-            $relations = ['user', 'book'];
+            $relations = ['user', 'book.category'];
 
             $userRequest = auth()->user()->role == 'user';
 

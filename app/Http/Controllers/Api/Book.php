@@ -61,7 +61,7 @@ class Book extends Controller
                 return ResponseHelper::success(json_decode($books));
             }
 
-            $book = Books::find($id);
+            $book = Books::with('category')->find($id);
 
             if (!$book) {
                 Log::error('Book not found', [
